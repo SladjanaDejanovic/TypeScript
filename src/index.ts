@@ -73,7 +73,17 @@ let mySize: Size = Size.Medium;
 console.log(mySize); // now in index.js there is only let mySize = 2; and console.log(mySize);
 
 /// functions
-function calculateTax(income: number): number {
-  return 0;
-}
+// function calculateTax(income: number, taxYear?: number): number {
+//   if ((taxYear || 2022) < 2022) return income * 1.2;
+//   return income * 1.3;
+// }
 // to properly annotate functions, function name (parameter: its type): type of return value (void is for where is nothing to return)
+// if parameter is optional, we write it like this taxYear?: number. when we call a function and don't supply that argument will get compiler error "'taxYear' is possibly 'undefined'". a way to fix this is to wrap it in () and give it a default value - if ((taxYear || 2022) < 2022) ....... so if we don't supply this argument it will be used its default value
+
+// better way to avoid error is to give this optional argument default value immediately:
+function calculateTax(income: number, taxYear = 2022): number {
+  if (taxYear < 2022) return income * 1.2;
+  return income * 1.3;
+}
+
+calculateTax(10_000);
