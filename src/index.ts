@@ -26,7 +26,7 @@ let level; // if we don't annotate it assumes type is any
 //   console.log(document); // no more error, but use this cautiously
 // }
 
-/// arrays
+/// Arrays
 let numbers: number[] = []; // the whole point of ts is to avoid mistakes and errors, so we shouldn't use type:any, that's why we should eather declare what's the type of var or use values of same type (if we don't say that this array is with number, ts assumes it's type any)
 
 numbers.forEach((n) => n.toString); // intelisense: typescript sugegest all things we can do with this, bc it knows it's for a number (when you start typing there is a list of things, this case i chose toString)
@@ -70,9 +70,9 @@ const enum Size {
   Large,
 }
 let mySize: Size = Size.Medium;
-console.log(mySize); // now in index.js there is only let mySize = 2; and console.log(mySize);
+// console.log(mySize); // now in index.js there is only let mySize = 2; and console.log(mySize);
 
-/// functions
+/// Functions
 // function calculateTax(income: number, taxYear?: number): number {
 //   if ((taxYear || 2022) < 2022) return income * 1.2;
 //   return income * 1.3;
@@ -87,3 +87,116 @@ function calculateTax(income: number, taxYear = 2022): number {
 }
 
 calculateTax(10_000);
+
+//// Objects
+// employee: { defining properties of this object} = { and then give values to those properties}
+
+// if property is optional we write it with ? after its name (for example  fax?); or set it to be empty string
+
+// for read-only properties we put readonly before name of property. this prevents us from accidentally modifying value of this property
+
+// to define METHOD (function) in this object - we have to specify the signature of the method: how many parameteres it's gonna have, type of each parameter, type of return value(in this object it's retire method)
+// let employee: {
+//   readonly id: number;
+//   name: string;
+//   retire: (date: Date) => void;
+// } = {
+// id: 1,
+// name: "",
+// retire: (date: Date) => {
+//   console.log(date);
+// },
+// };
+
+//// TYPE ALIAS -
+// if we wanna create another employee object we have to repeat its strucute, and that'll lead to duplicating lines of code. so to keep code DRY: we use TYPE ALIAS, so we can define CUSTOM type
+
+type Employee = {
+  readonly id: number;
+  name: string;
+  retire: (date: Date) => void;
+}; // here we have a place where we define a shape of employee object, so we can reuse it in multiple places
+
+let employee: Employee = {
+  id: 1,
+  name: "",
+  retire: (date: Date) => {
+    console.log(date);
+  },
+};
+
+//// UNION TYPES -
+// (weight: number | string) - weight type will be number or a string
+function kgToLbs(weight: number | string): number {
+  // Narrowing - narrowing union type into more specific type:
+  if (typeof weight === "number") return weight * 2.2;
+  else return parseInt(weight) * 2.2; // to convert weight to integer
+}
+
+kgToLbs(10);
+kgToLbs("10kg");
+
+//// INTERSECTION TYPES-
+// another way of combining types, using & (name: nuber & string, so that object is both types at the same time)
+
+type Draggable = {
+  drag: () => void;
+};
+
+type Resizable = {
+  resize: () => void;
+};
+
+// using intersection types we can combine Draggable and Resizable into a new type:
+
+type UIWidget = Draggable & Resizable;
+
+let textBox: UIWidget = {
+  drag: () => {},
+  resize: () => {},
+};
+
+///// LITERAL TYPES -
+// to limit the values we can use for certain property (to give it exact, specific value)
+
+// we can set the to 50 or 100, nothing else, bc those are speific values we declared
+// let quantity: 50 | 100 = 100;
+
+// to make it better, we make new type with type alias, craeting a literal type:
+type Quantity = 50 | 100;
+let quantity: Quantity = 100;
+
+type Metric = "cm" | "inch";
+
+//// NULLABLE TYPES -
+// if type could be null (for example, if we don't get a name), then we annotate it with union types
+function greet(name: string | null | undefined) {
+  if (name) console.log(name.toUpperCase());
+  else console.log("Hola!");
+}
+//greet(null); //if we set type of parameter, and then when we call function we use null, we get this error: "Argument of type 'null' is not assignable to parameter of type 'string'."
+// greet(null); // now that error is gone bc we used union types
+// greet(undefined);
+
+//// OPTIONAL CHAINING -
+type Customer = {
+  birthday?: Date;
+};
+
+function getCustomer(id: number): Customer | null | undefined {
+  return id === 0 ? null : { birthday: new Date() };
+}
+
+// let customer = getCustomer(0);
+// if (customer !== null && customer !== undefined) console.log(customer.birthday);
+
+// simpler way - OPTIONAL PROPERTY ACCESS OPERATOR
+let customer = getCustomer(6);
+console.log(customer?.birthday?.getFullYear()); // and now this piece of code gets executed only if it's not null or undefined
+
+//// OPTIONAL ELEMENT ACCESS OPERATOR -
+// customers?.[0]
+
+//// OPTIONAL CALL OPERATOR
+let log: any = null;
+log?.("a"); // gets executed only if log is referencing an actual function, otherwise will get undefined
