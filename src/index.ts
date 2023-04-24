@@ -6,7 +6,7 @@ let sales = 123_456_789;
 let course = "TypeScript";
 let is_published = true;
 
-// we don't ahve to always annotate type of variable, bc ts detects it by the type of value
+// we don't have to always annotate type of variable, bc ts detects it by the type of value
 
 let level; // if we don't annotate it assumes type is any
 
@@ -20,7 +20,7 @@ let level; // if we don't annotate it assumes type is any
 // }
 
 // but if we have a lot of this functions:
-//ctr+p tsconfig.json *Type Checking* "noImplicitAny": fasle
+//ctr+p tsconfig.json *Type Checking* "noImplicitAny": false
 
 // function render(document) {
 //   console.log(document); // no more error, but use this cautiously
@@ -42,7 +42,7 @@ let user: [number, string] = [1, "Slady"]; // if we try to add 3rd element we ge
 
 ///// ENUMS -
 // list of related constants
-// we don't have to define separe constants
+// we don't have to define separate constants
 
 // enum, then name of it (here it's used PascalCase - every first letter of every word is capital) { members }
 // enum Size {
